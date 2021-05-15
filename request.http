@@ -1,0 +1,34 @@
+####################
+# mindmap - Create #
+####################
+
+POST http://127.0.0.1:5000/mindmap?id=my-map
+
+curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "my-map"}'
+
+##########################
+# mindmap - Pretty print #
+##########################
+
+GET http://127.0.0.1:5000/mindmap
+
+curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "my-map"}'
+
+##############
+# Leaf - Add #
+##############
+POST http://127.0.0.1:5000/leaf?path=i/like/potatoes&text=Because reasons
+
+curl -X POST http://127.0.0.1:5000/leaf \
+  -H 'content-type: application/json' \
+  -d '{
+    "path": "i/like/potatoes",
+    "text": "Because reasons"
+}'
+
+###############
+# Leaf - Read #
+###############
+GET http://127.0.0.1:5000/leaf
+
+curl -X GET [something] -H 'content-type: application/json'
