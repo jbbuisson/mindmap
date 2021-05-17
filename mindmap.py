@@ -21,12 +21,6 @@ def createMap(mapId:str, text:str = '') -> Node:
 def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
     root = getRoot(mapId)
 
-    # for pre, _, node in RenderTree(root):
-    #     print("%s%s" % (pre, node.name))
-
-    # for pre, _, node in RenderTree(root):
-    #     print("%s" % (node.name))
-
     for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'   /', u'   /')):
         text = ''
         if renderText and len(node.text) > 0:
@@ -54,13 +48,24 @@ def addLeaf(parent:Node, names:list, text:str = ''):
     else:
         nextNode.text = text
 
+def getLeaves(mapId:str, names:str):
+    root = getRoot(mapId)
+    names = names.split(sep='/')
 
-# class Tree(Node):
+    return getLeaf(root, names)
+    
+def getLeaf(parent:Node, names:list):
+    for child in parent.children:
+        if child.name == names[0]:
+            if len(names) == 1:
+                return child.text
+            else:
+                return getLeaf(child, names[1:])
+    
+    # at least one name is not a node of the mindmap
+    # TODO What to return when at least one name is not found
+    return ''
 
-#     def __init__(self, id, text=''):
-#         super(Node, self).__init__()
-#         self.name = id
-#         self.text = text
 
 #################
 # TEST
@@ -69,8 +74,8 @@ def addLeaf(parent:Node, names:list, text:str = ''):
 # myTree = Tree('root_id')
 # print(RenderTree(myTree))
 
-rootId = 'root_id'
-myroot = createMap(rootId)
+# rootId = 'root_id'
+# myroot = createMap(rootId)
 # node100 = Node('node_100', myroot)
 # node110 = Node('node_110', node100)
 # node111 = Node('node_111', node110)
@@ -82,15 +87,17 @@ myroot = createMap(rootId)
 # node221 = Node('node_221', node220)
 # node222 = Node('node_222', node220)
 # node223 = Node('node_223', node220)
-addNodes(rootId, "i/like/potatoes", text='Because reasons')
-addNodes(rootId, "i/like/pineapples", text="Don't you ?")
-addNodes(rootId, "i/eat/tomatoes", text='Because the test says so')
+# addNodes(rootId, "i/like/potatoes", text='Because reasons')
+# addNodes(rootId, "i/like/pineapples", text="Don't you ?")
+# addNodes(rootId, "i/eat/tomatoes", text='Because the test says so')
 
+# print(getLeaves(rootId, "i/like/potatoes"))
+# print(getLeaves(rootId, "i/like/patates"))
 
-print('----------------')
-print(RenderTree(myroot))
-print('----------------')
-prettyPrintMap('root_id', renderText=False)
-print('----------------')
-prettyPrintMap('root_id', renderText=True)
-print('----------------')
+# print('----------------')
+# print(RenderTree(myroot))
+# print('----------------')
+# prettyPrintMap('root_id', renderText=False)
+# print('----------------')
+# prettyPrintMap('root_id', renderText=True)
+# print('----------------')

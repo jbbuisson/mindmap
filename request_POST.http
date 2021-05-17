@@ -1,0 +1,22 @@
+####################
+# mindmap - Create #
+####################
+
+POST http://127.0.0.1:5000/mindmap?id=my-map
+
+##############
+# Leaf - Add #
+##############
+POST http://127.0.0.1:5000/leaf?id=my-map&path=i/like/potatoes&text=Because reasons
+
+###############
+# Leaf - Read #
+###############
+GET http://127.0.0.1:5000/leaf?id=my-map&path=i/like/potatoes
+
+##########################
+# mindmap - Pretty print #
+##########################
+
+GET http://127.0.0.1:5000/mindmap?id=my-map
+
