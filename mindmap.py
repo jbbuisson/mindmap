@@ -1,41 +1,96 @@
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-import pandas as pd
-import ast
+from anytree import Node, RenderTree, AbstractStyle
 
-app = Flask(__name__)
-api = Api(app)
+mindMaps = {}
 
-class MindMap(Resource):
-    def post(self):
-        parser = reqparse.RequestParser()  # initialize
+def getRoot(id:str) -> Node:
+    if id not in mindMaps.keys():
+        print(f'minmap with id = {id} does not exist!')
+        raise KeyError
 
-        parser.add_argument('id', required=True)
+    return mindMaps[id]
 
-        args = parser.parse_args()  # parse arguments to dictionary
-        return {'action': 'POST', 'args': args}, 200
 
-    def get(self):
-        # data = pd.read_csv('users.csv')  # read CSV
-        # data = data.to_dict()  # convert dataframe to dictionary
-        # return {'data': data}, 200  # return data and 200 OK code
-        return {'action': 'GET', 'text': 'Pretty print mindmapping'}, 200
+def createMap(mapId:str, text:str = '') -> Node:
+    if mapId in mindMaps:
+        print(f'minmap with id = {mapId} already exists!')
+        raise KeyError
 
-class Leaf(Resource):
-    def post(self):
-        parser = reqparse.RequestParser()  # initialize
+    mindMaps[mapId] = Node(mapId, text=text)
+    return mindMaps[mapId]
 
-        parser.add_argument('path', required=True)
-        parser.add_argument('text', required=True)
+def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
+    root = getRoot(mapId)
 
-        args = parser.parse_args()  # parse arguments to dictionary
-        return {'text': 'Add a leaf', 'args': args}
+    # for pre, _, node in RenderTree(root):
+    #     print("%s%s" % (pre, node.name))
 
-    def get(self):
-        return {'text': 'Read a leaf'}
+    # for pre, _, node in RenderTree(root):
+    #     print("%s" % (node.name))
 
-api.add_resource(MindMap, '/mindmap')  # '/users' is our entry point
-api.add_resource(Leaf, '/leaf')  # '/users' is our entry point
+    for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'   /', u'   /')):
+        text = ''
+        if renderText and len(node.text) > 0:
+            text = ' \t\t--> ' + node.text
 
-if __name__ == '__main__':
-    app.run(debug = True)
+        print("%s%s%s" % (pre, node.name, text))
+
+
+def addNodes(mapId:str, names:str, text:str = '') -> None:
+    root = getRoot(mapId)
+    names = names.split(sep='/')
+
+    addLeaf(root, names, text)
+
+def addLeaf(parent:Node, names:list, text:str = ''):
+    for child in parent.children:
+        if child.name == names[0]:
+            addLeaf(child, names[1:], text)
+            return
+    
+    # currentName is not a child of parent, create a new node
+    nextNode = Node(names[0], parent, text='')
+    if len(names) > 1:
+        addLeaf(nextNode, names[1:], text=text)
+    else:
+        nextNode.text = text
+
+
+# class Tree(Node):
+
+#     def __init__(self, id, text=''):
+#         super(Node, self).__init__()
+#         self.name = id
+#         self.text = text
+
+#################
+# TEST
+#################
+
+# myTree = Tree('root_id')
+# print(RenderTree(myTree))
+
+rootId = 'root_id'
+myroot = createMap(rootId)
+# node100 = Node('node_100', myroot)
+# node110 = Node('node_110', node100)
+# node111 = Node('node_111', node110)
+# node200 = Node('node_200', myroot)
+# node210 = Node('node_210', node200)
+# node211 = Node('node_211', node210)
+# node212 = Node('node_212', node210)
+# node220 = Node('node_220', node200)
+# node221 = Node('node_221', node220)
+# node222 = Node('node_222', node220)
+# node223 = Node('node_223', node220)
+addNodes(rootId, "i/like/potatoes", text='Because reasons')
+addNodes(rootId, "i/like/pineapples", text="Don't you ?")
+addNodes(rootId, "i/eat/tomatoes", text='Because the test says so')
+
+
+print('----------------')
+print(RenderTree(myroot))
+print('----------------')
+prettyPrintMap('root_id', renderText=False)
+print('----------------')
+prettyPrintMap('root_id', renderText=True)
+print('----------------')
