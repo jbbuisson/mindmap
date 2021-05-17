@@ -1,3 +1,7 @@
+# TODO test
+# TODO SqlLite
+# TODO readme
+
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 import pandas as pd
@@ -49,11 +53,11 @@ class Leaf(Resource):
         parser.add_argument('path', required=True)
 
         args = parser.parse_args()  # parse arguments to dictionary
-        
+
         return mindmap.getLeaves(args.id, args.path), 200
 
-api.add_resource(MindMap, '/mindmap')  # '/users' is our entry point
-api.add_resource(Leaf, '/leaf')  # '/users' is our entry point
+api.add_resource(MindMap, '/mindmap')
+api.add_resource(Leaf, '/leaf')
 
 if __name__ == '__main__':
     app.run(debug = True)

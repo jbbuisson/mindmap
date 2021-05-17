@@ -40,7 +40,7 @@ def addLeaf(parent:Node, names:list, text:str = ''):
         if child.name == names[0]:
             addLeaf(child, names[1:], text)
             return
-    
+
     # currentName is not a child of parent, create a new node
     nextNode = Node(names[0], parent, text='')
     if len(names) > 1:
@@ -53,7 +53,7 @@ def getLeaves(mapId:str, names:str):
     names = names.split(sep='/')
 
     return getLeaf(root, names)
-    
+
 def getLeaf(parent:Node, names:list):
     for child in parent.children:
         if child.name == names[0]:
@@ -61,7 +61,7 @@ def getLeaf(parent:Node, names:list):
                 return child.text
             else:
                 return getLeaf(child, names[1:])
-    
+
     # at least one name is not a node of the mindmap
     # TODO What to return when at least one name is not found
     return ''
