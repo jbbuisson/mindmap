@@ -1,37 +1,23 @@
-import pickle
-from pathlib import Path
-
 from anytree import AbstractStyle, Node, RenderTree
+from mindmap_dto import Mindmap_dto
 
 def getRoot(mapId:str) -> Node:
-    # if mapId not in mindMaps.keys():
-    #     print(f'Mindmap with id = {mapId} does not exist!')
-    #     raise KeyError
-
-    # return mindMaps[id]
-    return load(mapId)
+    return Mindmap_dto.load(mapId)
 
 
 def createMap(mapId:str, text:str = '') -> Node:
-    # if mapId in mindMaps:
-    #     print(f'Mindmap with id = {mapId} already exists!')
-    #     raise KeyError
-
-    # mindMaps[mapId] = Node(mapId, text=text)
-
-    # return mindMaps[mapId]
-    return save(mapId, Node('root', text=text))
+    return Mindmap_dto.save(mapId, Node('root', text=text))
 
 
 def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
     root = getRoot(mapId)
 
-    for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'   /', u'   /')):
+    for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'    ', u'    ')):
         text = ''
         if renderText and len(node.text) > 0:
             text = ' \t\t--> ' + node.text
 
-        print("%s%s%s" % (pre, node.name, text))
+        print("%s%s/%s" % (pre, node.name, text))
 
 
 def addNodes(mapId:str, names:str, text:str = '') -> None:
@@ -39,7 +25,7 @@ def addNodes(mapId:str, names:str, text:str = '') -> None:
     names = names.split(sep='/')
 
     addLeaf(root, names, text)
-    save(mapId, root)
+    Mindmap_dto.save(mapId, root)
 
 def addLeaf(parent:Node, names:list, text:str = ''):
     for child in parent.children:
@@ -85,25 +71,6 @@ def getLeaf(parent:Node, names:list):
     # TODO What to return when at least one name is not found
     return ''
 
-
-###############################
-# Data persistence
-###############################
-def getFileName(mapId:str) -> Path:
-    path = Path('./data/')
-    if not path.exists():
-        path.mkdir()
-    return path / (mapId + '.pickle')
-
-
-def save(mapId:str, root:Node):
-    with getFileName(mapId).open(mode='wb') as file:
-        pickle.dump(root, file)
-
-
-def load(mapId:str) -> Node:
-    with getFileName(mapId).open(mode='rb') as file:
-        return pickle.load(file)
 
 #################
 # TEST

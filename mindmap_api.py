@@ -1,10 +1,6 @@
 # TODO test
-# TODO data persistence
 # TODO readme
 
-import ast
-
-import pandas as pd
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 
