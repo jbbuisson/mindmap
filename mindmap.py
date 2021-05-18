@@ -1,22 +1,27 @@
-from anytree import Node, RenderTree, AbstractStyle
+import pickle
+from pathlib import Path
 
-mindMaps = {}
+from anytree import AbstractStyle, Node, RenderTree
 
-def getRoot(id:str) -> Node:
-    if id not in mindMaps.keys():
-        print(f'minmap with id = {id} does not exist!')
-        raise KeyError
+def getRoot(mapId:str) -> Node:
+    # if mapId not in mindMaps.keys():
+    #     print(f'Mindmap with id = {mapId} does not exist!')
+    #     raise KeyError
 
-    return mindMaps[id]
+    # return mindMaps[id]
+    return load(mapId)
 
 
 def createMap(mapId:str, text:str = '') -> Node:
-    if mapId in mindMaps:
-        print(f'minmap with id = {mapId} already exists!')
-        raise KeyError
+    # if mapId in mindMaps:
+    #     print(f'Mindmap with id = {mapId} already exists!')
+    #     raise KeyError
 
-    mindMaps[mapId] = Node(mapId, text=text)
-    return mindMaps[mapId]
+    # mindMaps[mapId] = Node(mapId, text=text)
+
+    # return mindMaps[mapId]
+    return save(mapId, Node('root', text=text))
+
 
 def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
     root = getRoot(mapId)
@@ -34,12 +39,19 @@ def addNodes(mapId:str, names:str, text:str = '') -> None:
     names = names.split(sep='/')
 
     addLeaf(root, names, text)
+    save(mapId, root)
 
 def addLeaf(parent:Node, names:list, text:str = ''):
     for child in parent.children:
         if child.name == names[0]:
-            addLeaf(child, names[1:], text)
+            if len(names) > 1:
+                addLeaf(child, names[1:], text)
             return
+
+    # The same node has been added a second time, the text will be updated
+    if len(names) == 0:
+        parent.text = text
+        return
 
     # currentName is not a child of parent, create a new node
     nextNode = Node(names[0], parent, text='')
@@ -48,11 +60,18 @@ def addLeaf(parent:Node, names:list, text:str = ''):
     else:
         nextNode.text = text
 
+
 def getLeaves(mapId:str, names:str):
     root = getRoot(mapId)
-    names = names.split(sep='/')
+    names_split = names.split(sep='/')
 
-    return getLeaf(root, names)
+    # return getLeaf(root, names_split)
+    text = getLeaf(root, names_split)
+    leaf = {}
+    leaf['path'] = names
+    leaf['text'] = text
+
+    return leaf
 
 def getLeaf(parent:Node, names:list):
     for child in parent.children:
@@ -67,35 +86,44 @@ def getLeaf(parent:Node, names:list):
     return ''
 
 
+###############################
+# Data persistence
+###############################
+def getFileName(mapId:str) -> Path:
+    path = Path('./data/')
+    if not path.exists():
+        path.mkdir()
+    return path / (mapId + '.pickle')
+
+
+def save(mapId:str, root:Node):
+    with getFileName(mapId).open(mode='wb') as file:
+        pickle.dump(root, file)
+
+
+def load(mapId:str) -> Node:
+    with getFileName(mapId).open(mode='rb') as file:
+        return pickle.load(file)
+
 #################
 # TEST
 #################
 
-# myTree = Tree('root_id')
-# print(RenderTree(myTree))
-
 # rootId = 'root_id'
 # myroot = createMap(rootId)
-# node100 = Node('node_100', myroot)
-# node110 = Node('node_110', node100)
-# node111 = Node('node_111', node110)
-# node200 = Node('node_200', myroot)
-# node210 = Node('node_210', node200)
-# node211 = Node('node_211', node210)
-# node212 = Node('node_212', node210)
-# node220 = Node('node_220', node200)
-# node221 = Node('node_221', node220)
-# node222 = Node('node_222', node220)
-# node223 = Node('node_223', node220)
-# addNodes(rootId, "i/like/potatoes", text='Because reasons')
-# addNodes(rootId, "i/like/pineapples", text="Don't you ?")
-# addNodes(rootId, "i/eat/tomatoes", text='Because the test says so')
+# # myroot = load(rootId)
 
-# print(getLeaves(rootId, "i/like/potatoes"))
-# print(getLeaves(rootId, "i/like/patates"))
+# addNodes(rootId, "I/like/potatoes", text='Because reasons')
+# addNodes(rootId, "I/like/pineapples", text="Don't you ?")
+# addNodes(rootId, "I/eat/tomatoes", text='Because the test says so')
+# addNodes(rootId, "I/eat/tomatoes/for/breakfast")
+# addNodes(rootId, "I/eat/tomatoes/for/dinner", text='Everybody does!')
 
-# print('----------------')
-# print(RenderTree(myroot))
+# print(getLeaves(rootId, "I/like/potatoes"))
+# print(getLeaves(rootId, "I/like/patates"))
+
+# # print('----------------')
+# # print(RenderTree(myroot))
 # print('----------------')
 # prettyPrintMap('root_id', renderText=False)
 # print('----------------')

@@ -1,7 +1,7 @@
 ####################
 # mindmap - Create #
 ####################
-curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "my-map"}'
+curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
 
 ##############
 # Leaf - Add #
@@ -9,8 +9,8 @@ curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' 
 curl -X POST http://127.0.0.1:5000/leaf \
   -H 'content-type: application/json' \
   -d '{
-    "id": "my-map",
-    "path": "i/like/potatoes",
+    "id": "root_id",
+    "path": "I/like/big/potatoes",
     "text": "Because reasons"
 }'
 
@@ -20,11 +20,11 @@ curl -X POST http://127.0.0.1:5000/leaf \
 curl -X GET http://127.0.0.1:5000/leaf \
   -H 'content-type: application/json' \
   -d '{
-    "id": "my-map",
-    "path": "i/like/potatoes"
+    "id": "root_id",
+    "path": "I/like/potatoes"
 }'
 
 ##########################
 # mindmap - Pretty print #
 ##########################
-curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "my-map"}'
+curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'

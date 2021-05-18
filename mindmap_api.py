@@ -1,11 +1,12 @@
 # TODO test
-# TODO SqlLite
+# TODO data persistence
 # TODO readme
 
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-import pandas as pd
 import ast
+
+import pandas as pd
+from flask import Flask
+from flask_restful import Api, Resource, reqparse
 
 import mindmap
 
@@ -23,9 +24,6 @@ class MindMap(Resource):
         return '', 200
 
     def get(self):
-        # data = pd.read_csv('users.csv')  # read CSV
-        # data = data.to_dict()  # convert dataframe to dictionary
-        # return {'data': data}, 200  # return data and 200 OK code
         parser = reqparse.RequestParser()  # initialize
 
         parser.add_argument('id', required=True)
