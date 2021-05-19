@@ -28,16 +28,16 @@ def addNodes(mapId:str, names:str, text:str = '') -> None:
     Mindmap_dto.save(mapId, root)
 
 def addLeaf(parent:Node, names:list, text:str = ''):
+    # The same node has been added a second time, the text will be updated
+    if len(names) == 0:
+        parent.text = text
+        return
+
     for child in parent.children:
         if child.name == names[0]:
             if len(names) > 1:
                 addLeaf(child, names[1:], text)
             return
-
-    # The same node has been added a second time, the text will be updated
-    if len(names) == 0:
-        parent.text = text
-        return
 
     # currentName is not a child of parent, create a new node
     nextNode = Node(names[0], parent, text='')
@@ -83,6 +83,7 @@ def getLeaf(parent:Node, names:list):
 # addNodes(rootId, "I/like/potatoes", text='Because reasons')
 # addNodes(rootId, "I/like/pineapples", text="Don't you ?")
 # addNodes(rootId, "I/eat/tomatoes", text='Because the test says so')
+# addNodes(rootId, "I/eat/tomatoes/for/breakfast")
 # addNodes(rootId, "I/eat/tomatoes/for/breakfast")
 # addNodes(rootId, "I/eat/tomatoes/for/dinner", text='Everybody does!')
 

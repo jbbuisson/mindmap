@@ -13,7 +13,7 @@ class Mindmap_dto:
 
 
     @staticmethod
-    def save(mapId:str, root:Node):
+    def save(mapId:str, root:Node) -> None:
         with Mindmap_dto._getFileName(mapId).open(mode='wb') as file:
             pickle.dump(root, file)
 
