@@ -17,7 +17,8 @@ def pretty_print_map(map_id:str, render_text:bool = "False") -> None:
 
         print("%s%s/%s" % (pre, node.name, text))
 
-        FAIRE UN RETURN ET PAS UN PRINT !!!
+        # JBB
+        # FAIRE UN RETURN ET PAS UN PRINT !!!
 
 def add_nodes(mapId:str, names:str, text:str = '') -> None:
     root = Mindmap_dto.load(mapId)
