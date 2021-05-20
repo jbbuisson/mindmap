@@ -53,4 +53,4 @@ api.add_resource(MindMap, '/mindmap')
 api.add_resource(Leaf, '/leaf')
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()

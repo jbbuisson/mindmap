@@ -1,52 +1,46 @@
-# Mind Map API.
+# Mindmap
 
-We want you to design a [mind map](https://en.wikipedia.org/wiki/Mind_map) web service.
+Mindmap is a web service that provides REST API endpoints to create a mind map and store its data in files.
 
-Your service must provide REST API endpoints to create a mind map and store its data in a backend.
-You can use any code language you feel comfortable with. 
+# How to use this API
 
-# Requirements.
+## Installation
+* Clone this repository
+* Change directory to `mindmap`
+* Run `./bin/run.sh`. This will
+    * Install the pyhton module `virtualenv` on your system
+    * Create a virtual environment called `.venv`
+    * Activate `.venv`
+    * Install all the required modules
+    * Launch the web app at this address http://127.0.0.1:5000/
 
-The provided `./bin/run.sh` script must be enough to build and / or start the REST API.
-
-Please give us your final version in a Git repository (github, gitlab, ...).
-
-We expect that you provide at least:
-* Unit tests (min coverage: 30%).
-* Persistence: data can be saved in file(s).
-
-If you need support, feel free to contact us.
-
-# Review. 
-
-These are some of the things my colleagues will be looking at when reviewing your test: 
-* The API should conform to the specifications (correct endpoints and it should work).
-* Focus on code quality before starting bonus requirements.
-* Don’t reinvent the wheel, use best practices, use the right tool for the job.
-* Your REST API has to start easily without errors (you can provide us a README file to explain how to start it).
-
-# Specifications.
-
-## Create a mind map.
+## Exposed endpoints
+### Create a mind map.
 
 ```bash
-$ curl -X [verb] [something] -H 'content-type: application/json' -d '{"id": "my-map"}'
+$ curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
 ```
 
-## Add a leaf (path) to the map.
+### Add a leaf (path) to the map.
 
 ```bash
-$ curl -X [verb] [something] \
+$ curl -X POST http://127.0.0.1:5000/leaf \
   -H 'content-type: application/json' \
   -d '{
-    "path": "i/like/potatoes",
+    "id": "root_id",
+    "path": "I/do not like/spiders",
     "text": "Because reasons"
 }'
 ```
-## Read a leaf (path) of the map.
+### Read a leaf (path) of the map.
 
 ```bash
-$ curl -X [verb] [something] -H 'content-type: application/json'
+$ curl -X GET http://127.0.0.1:5000/leaf \
+  -H 'content-type: application/json' \
+  -d '{
+    "id": "root_id",
+    "path": "I/like/big/potatoes"
+}'
 
 Expected response:
 {
@@ -55,10 +49,10 @@ Expected response:
 }
 ```
 
-## Pretty print the whole tree of the mind map.
+### Pretty print the whole tree of the mind map.
 
 ```bash
-$ curl -X [verb] [something] 
+$ curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
 
 Expected output:
 root/
@@ -69,13 +63,9 @@ root/
             tomatoes
 ```
 
-# BONUS Requirements. 
-
-If you have time, feel free to add improvements.
-
-Here are some ideas:
-* Unit tests coverage to 75%.
-* If not already done, a nice storage backend (SQL Database, ...).
-* Docker image.
-* Pipeline to build the docker image, execute the unit tests (example, github + travis CI).
-* Deployment in a Cloud service (Heroku, GCP AppEngine...)
+## Unit test coverage
+A unit test coverage report can be obtained using the following commands:
+```bash
+coverage run --include=mindma*.py -m pytest ./test/
+coverage report
+```
