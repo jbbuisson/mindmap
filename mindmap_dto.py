@@ -3,6 +3,7 @@ from pathlib import Path
 
 from anytree import Node
 
+
 class Mindmap_dto:
     @staticmethod
     def _getFileName(mapId:str) -> Path:

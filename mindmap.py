@@ -1,8 +1,6 @@
 from anytree import AbstractStyle, Node, RenderTree
-from mindmap_dto import Mindmap_dto
 
-def getRoot(mapId:str) -> Node:
-    return Mindmap_dto.load(mapId)
+from mindmap_dto import Mindmap_dto
 
 
 def createMap(mapId:str, text:str = '') -> Node:
@@ -10,7 +8,7 @@ def createMap(mapId:str, text:str = '') -> Node:
 
 
 def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
-    root = getRoot(mapId)
+    root = Mindmap_dto.load(mapId)
 
     for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'    ', u'    ')):
         text = ''
@@ -21,11 +19,12 @@ def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
 
 
 def addNodes(mapId:str, names:str, text:str = '') -> None:
-    root = getRoot(mapId)
+    root = Mindmap_dto.load(mapId)
     names = names.split(sep='/')
 
     addLeaf(root, names, text)
     Mindmap_dto.save(mapId, root)
+
 
 def addLeaf(parent:Node, names:list, text:str = ''):
     # The same node has been added a second time, the text will be updated
@@ -35,8 +34,8 @@ def addLeaf(parent:Node, names:list, text:str = ''):
 
     for child in parent.children:
         if child.name == names[0]:
-            if len(names) > 1:
-                addLeaf(child, names[1:], text)
+            # if len(names) > 1:
+            addLeaf(child, names[1:], text)
             return
 
     # currentName is not a child of parent, create a new node
@@ -48,7 +47,7 @@ def addLeaf(parent:Node, names:list, text:str = ''):
 
 
 def getLeaves(mapId:str, names:str):
-    root = getRoot(mapId)
+    root = Mindmap_dto.load(mapId)
     names_split = names.split(sep='/')
 
     # return getLeaf(root, names_split)
@@ -78,7 +77,7 @@ def getLeaf(parent:Node, names:list):
 
 # rootId = 'root_id'
 # myroot = createMap(rootId)
-# # myroot = load(rootId)
+# # myroot = Mindmap_dto.load(rootId)
 
 # addNodes(rootId, "I/like/potatoes", text='Because reasons')
 # addNodes(rootId, "I/like/pineapples", text="Don't you ?")

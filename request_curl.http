@@ -10,7 +10,7 @@ curl -X POST http://127.0.0.1:5000/leaf \
   -H 'content-type: application/json' \
   -d '{
     "id": "root_id",
-    "path": "I/like/big/potatoes",
+    "path": "I/do not like/spiders",
     "text": "Because reasons"
 }'
 
@@ -21,7 +21,7 @@ curl -X GET http://127.0.0.1:5000/leaf \
   -H 'content-type: application/json' \
   -d '{
     "id": "root_id",
-    "path": "I/like/potatoes"
+    "path": "I/like/big/potatoes"
 }'
 
 ##########################

@@ -1,4 +1,3 @@
-# TODO test
 # TODO readme
 
 from flask import Flask
@@ -11,7 +10,7 @@ api = Api(app)
 
 class MindMap(Resource):
     def post(self):
-        parser = reqparse.RequestParser()  # initialize
+        parser = reqparse.RequestParser()
 
         parser.add_argument('id', required=True)
 
@@ -20,7 +19,7 @@ class MindMap(Resource):
         return '', 200
 
     def get(self):
-        parser = reqparse.RequestParser()  # initialize
+        parser = reqparse.RequestParser()
 
         parser.add_argument('id', required=True)
 
@@ -30,7 +29,7 @@ class MindMap(Resource):
 
 class Leaf(Resource):
     def post(self):
-        parser = reqparse.RequestParser()  # initialize
+        parser = reqparse.RequestParser()
 
         parser.add_argument('id', required=True)
         parser.add_argument('path', required=True)
@@ -41,7 +40,7 @@ class Leaf(Resource):
         return '', 200
 
     def get(self):
-        parser = reqparse.RequestParser()  # initialize
+        parser = reqparse.RequestParser()
 
         parser.add_argument('id', required=True)
         parser.add_argument('path', required=True)
