@@ -3,30 +3,30 @@ from anytree import AbstractStyle, Node, RenderTree
 from mindmap_dto import Mindmap_dto
 
 
-def createMap(mapId:str, text:str = '') -> Node:
-    return Mindmap_dto.save(mapId, Node('root', text=text))
+def createMap(map_id:str, text:str = '') -> Node:
+    return Mindmap_dto.save(map_id, Node('root', text=text))
 
 
-def prettyPrintMap(mapId:str, renderText:bool = "False") -> None:
-    root = Mindmap_dto.load(mapId)
+def pretty_print_map(map_id:str, render_text:bool = "False") -> None:
+    root = Mindmap_dto.load(map_id)
 
     for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'    ', u'    ')):
         text = ''
-        if renderText and len(node.text) > 0:
+        if render_text and len(node.text) > 0:
             text = ' \t\t--> ' + node.text
 
         print("%s%s/%s" % (pre, node.name, text))
 
 
-def addNodes(mapId:str, names:str, text:str = '') -> None:
+def add_nodes(mapId:str, names:str, text:str = '') -> None:
     root = Mindmap_dto.load(mapId)
     names = names.split(sep='/')
 
-    addLeaf(root, names, text)
+    add_leaf(root, names, text)
     Mindmap_dto.save(mapId, root)
 
 
-def addLeaf(parent:Node, names:list, text:str = ''):
+def add_leaf(parent:Node, names:list, text:str = ''):
     # The same node has been added a second time, the text will be updated
     if len(names) == 0:
         parent.text = text
@@ -34,65 +34,37 @@ def addLeaf(parent:Node, names:list, text:str = ''):
 
     for child in parent.children:
         if child.name == names[0]:
-            # if len(names) > 1:
-            addLeaf(child, names[1:], text)
+            add_leaf(child, names[1:], text)
             return
 
-    # currentName is not a child of parent, create a new node
-    nextNode = Node(names[0], parent, text='')
+    # names[0] is not a child of parent, create a new node
+    new_node = Node(names[0], parent, text='')
+
     if len(names) > 1:
-        addLeaf(nextNode, names[1:], text=text)
+        add_leaf(new_node, names[1:], text=text)
     else:
-        nextNode.text = text
+        new_node.text = text
 
 
-def getLeaves(mapId:str, names:str):
+def get_leaves(mapId:str, names:str):
     root = Mindmap_dto.load(mapId)
     names_split = names.split(sep='/')
 
-    # return getLeaf(root, names_split)
-    text = getLeaf(root, names_split)
+    text = get_leaf(root, names_split)
     leaf = {}
     leaf['path'] = names
     leaf['text'] = text
 
     return leaf
 
-def getLeaf(parent:Node, names:list):
+def get_leaf(parent:Node, names:list):
     for child in parent.children:
         if child.name == names[0]:
             if len(names) == 1:
                 return child.text
             else:
-                return getLeaf(child, names[1:])
+                return get_leaf(child, names[1:])
 
     # at least one name is not a node of the mindmap
-    # TODO What to return when at least one name is not found
+    # empty string is returned
     return ''
-
-
-#################
-# TEST
-#################
-
-# rootId = 'root_id'
-# myroot = createMap(rootId)
-# # myroot = Mindmap_dto.load(rootId)
-
-# addNodes(rootId, "I/like/potatoes", text='Because reasons')
-# addNodes(rootId, "I/like/pineapples", text="Don't you ?")
-# addNodes(rootId, "I/eat/tomatoes", text='Because the test says so')
-# addNodes(rootId, "I/eat/tomatoes/for/breakfast")
-# addNodes(rootId, "I/eat/tomatoes/for/breakfast")
-# addNodes(rootId, "I/eat/tomatoes/for/dinner", text='Everybody does!')
-
-# print(getLeaves(rootId, "I/like/potatoes"))
-# print(getLeaves(rootId, "I/like/patates"))
-
-# # print('----------------')
-# # print(RenderTree(myroot))
-# print('----------------')
-# prettyPrintMap('root_id', renderText=False)
-# print('----------------')
-# prettyPrintMap('root_id', renderText=True)
-# print('----------------')

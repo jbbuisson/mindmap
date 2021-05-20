@@ -5,8 +5,6 @@ from pathlib import Path
 from anytree import Node
 from mindmap_dto import Mindmap_dto
 
-# from pytest_mock import 
-
 def mkDataDir():
     Path.mkdir(Path('./data/'), exist_ok=True)
 
@@ -19,14 +17,14 @@ def rmDataDir():
 
 def test_getFileName_data_folder_exists():
     mkDataDir()
-    fileName = Mindmap_dto._getFileName('myMapId')
+    fileName = Mindmap_dto._get_filename('myMapId')
     assert fileName == Path('data/myMapId.pickle')
     rmDataDir()
 
 
 def test_getFileName_data_folder_does_not_exists():
     rmDataDir()
-    fileName = Mindmap_dto._getFileName('myMapId')
+    fileName = Mindmap_dto._get_filename('myMapId')
     assert fileName == Path('data/myMapId.pickle')
     rmDataDir()
 

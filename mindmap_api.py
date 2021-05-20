@@ -24,7 +24,7 @@ class MindMap(Resource):
         parser.add_argument('id', required=True)
 
         args = parser.parse_args()  # parse arguments to dictionary
-        mindmap.prettyPrintMap(args.id, False)
+        mindmap.pretty_print_map(args.id, False)
         return '', 200
 
 class Leaf(Resource):
@@ -36,7 +36,7 @@ class Leaf(Resource):
         parser.add_argument('text', required=True)
 
         args = parser.parse_args()  # parse arguments to dictionary
-        mindmap.addNodes(args.id, args.path, args.text)
+        mindmap.add_nodes(args.id, args.path, args.text)
         return '', 200
 
     def get(self):
@@ -47,7 +47,7 @@ class Leaf(Resource):
 
         args = parser.parse_args()  # parse arguments to dictionary
 
-        return mindmap.getLeaves(args.id, args.path), 200
+        return mindmap.get_leaves(args.id, args.path), 200
 
 api.add_resource(MindMap, '/mindmap')
 api.add_resource(Leaf, '/leaf')
