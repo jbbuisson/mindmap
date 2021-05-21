@@ -24,7 +24,7 @@ curl -X POST http://127.0.0.1:5000/leaf/root_id \
 curl -X POST http://127.0.0.1:5000/leaf/root_id \
   -H 'content-type: application/json' \
   -d '{
-    "path" : "I/like/pineapple",
+    "path" : "I/like/pineapples",
     "text" : "Don''t you ?"
 }'
 
