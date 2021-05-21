@@ -1,6 +1,7 @@
 anytree==2.8.0
 attrs==21.2.0
 click==8.0.1
+coverage==5.5
 Flask==2.0.0
 importlib-metadata==4.0.1
 iniconfig==1.1.1

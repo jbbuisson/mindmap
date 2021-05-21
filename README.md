@@ -24,23 +24,23 @@ $ curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json
 ### Add a leaf (path) to the map.
 
 ```bash
-$ curl -X POST http://127.0.0.1:5000/leaf \
+$ curl -X POST http://127.0.0.1:5000/leaf/root_id \
   -H 'content-type: application/json' \
   -d '{
-    "id": "root_id",
-    "path": "I/do not like/spiders",
-    "text": "Because reasons"
+    "path" : "I/like/potatoes",
+    "text" : "Because reasons"
 }'
+
 ```
 ### Read a leaf (path) of the map.
 
 ```bash
-$ curl -X GET http://127.0.0.1:5000/leaf \
+$ curl -X GET http://127.0.0.1:5000/leaf/root_id \
   -H 'content-type: application/json' \
   -d '{
-    "id": "root_id",
-    "path": "I/like/big/potatoes"
+    "path": "I/like/potatoes"
 }'
+
 
 Expected response:
 {
