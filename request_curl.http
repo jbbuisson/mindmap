@@ -1,30 +1,74 @@
-####################
-# mindmap - Create #
-####################
+############
+# mindmap  #
+############
+
+### Create
 curl -X POST http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
 
-##############
-# Leaf - Add #
-##############
-curl -X POST http://127.0.0.1:5000/leaf \
+### Pretty print
+curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
+
+########
+# Leaf #
+########
+
+### Add - 1
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
   -H 'content-type: application/json' \
   -d '{
-    "id": "root_id",
-    "path": "I/do not like/spiders",
-    "text": "Because reasons"
+    "path" : "I/like/potatoes",
+    "text" : "Because reasons"
 }'
 
-###############
-# Leaf - Read #
-###############
-curl -X GET http://127.0.0.1:5000/leaf \
+### Add - 2
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
   -H 'content-type: application/json' \
   -d '{
-    "id": "root_id",
+    "path" : "I/like/pineapple",
+    "text" : "Don''t you ?"
+}'
+
+### Add - 3
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
+    "path" : "I/eat/tomatoes",
+    "text" : "Because the test says so"
+}'
+
+### Add - 4
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
+    "path" : "I/eat/tomatoes/for breakfast"
+}'
+
+### Add - 5
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
+    "path" : "I/eat/tomatoes/for breakfast"
+}'
+
+### Add - 6
+curl -X POST http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
+    "path" : "I/eat/tomatoes/for dinner",
+    "text" : "Everybody does!"
+}'
+
+### Read - 1
+curl -X GET http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
     "path": "I/like/big/potatoes"
 }'
 
-##########################
-# mindmap - Pretty print #
-##########################
-curl -X GET http://localhost:5000/mindmap  -H 'content-type: application/json' -d '{"id": "root_id"}'
+### Read - 2
+curl -X GET http://127.0.0.1:5000/leaf/root_id \
+  -H 'content-type: application/json' \
+  -d '{
+    "path": "I/like/potatoes"
+}'
+

@@ -8,17 +8,20 @@ def createMap(map_id:str, text:str = '') -> Node:
 
 
 def pretty_print_map(map_id:str, render_text:bool = "False") -> None:
-    root = Mindmap_dto.load(map_id)
+    try:
+        root = Mindmap_dto.load(map_id)
+    except Exception as e:
+        return f"ERROR: mindmap {map_id} does not exist!"
+    pretty_print = []
 
     for pre, _, node in RenderTree(root, style=AbstractStyle(u'    ', u'    ', u'    ')):
         text = ''
         if render_text and len(node.text) > 0:
             text = ' \t\t--> ' + node.text
 
-        print("%s%s/%s" % (pre, node.name, text))
+        pretty_print.append(f"{pre}{node.name}/{text}")
 
-        # JBB
-        # FAIRE UN RETURN ET PAS UN PRINT !!!
+    return '\n'.join(pretty_print)
 
 def add_nodes(mapId:str, names:str, text:str = '') -> None:
     root = Mindmap_dto.load(mapId)
@@ -39,7 +42,7 @@ def add_leaf(parent:Node, names:list, text:str = ''):
             add_leaf(child, names[1:], text)
             return
 
-    # names[0] is not a child of parent, create a new node
+    # names[0] is a new child of parent, create a node
     new_node = Node(names[0], parent, text='')
 
     if len(names) > 1:
@@ -69,4 +72,4 @@ def get_leaf(parent:Node, names:list):
 
     # at least one name is not a node of the mindmap
     # empty string is returned
-    return ''
+    return 'ERROR: LEAF NOT FOUND'

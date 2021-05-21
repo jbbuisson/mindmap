@@ -1,7 +1,8 @@
 from mindmap import *
 
+
 # More an integration test than a unit test...
-def test_prettyPrintMap(capsys):
+def test_prettyPrintMap():
     rootId = 'root_id'
     createMap(rootId)
 
@@ -12,6 +13,6 @@ def test_prettyPrintMap(capsys):
     add_nodes(rootId, "I/eat/tomatoes/for/breakfast")
     add_nodes(rootId, "I/eat/tomatoes/for/dinner", text='Everybody does!')
 
-    pretty_print_map('root_id', render_text=False)
-    captured = capsys.readouterr()
-    assert captured.out == "root/\n    I/\n        like/\n            potatoes/\n            pineapples/\n        eat/\n            tomatoes/\n                for/\n                    breakfast/\n                    dinner/\n"
+    pretty_print = pretty_print_map('root_id', render_text=False)
+    expected_pretty_print = "root/\n    I/\n        like/\n            potatoes/\n            pineapples/\n        eat/\n            tomatoes/\n                for/\n                    breakfast/\n                    dinner/"
+    assert pretty_print == expected_pretty_print

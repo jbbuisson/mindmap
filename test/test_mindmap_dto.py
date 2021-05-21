@@ -5,6 +5,7 @@ from pathlib import Path
 from anytree import Node
 from mindmap_dto import Mindmap_dto
 
+
 def mkDataDir():
     Path.mkdir(Path('./data/'), exist_ok=True)
 
