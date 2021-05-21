@@ -1,14 +1,14 @@
 # Mindmap
 
-Mindmap is a web service that provides REST API endpoints to create a mind map and store its data in files.
+Mindmap is a web service that provides REST API endpoints to create mindmaps and store their data in files.
 
 # How to use this API
 
 ## Installation
 * Clone this repository
 * Change directory to `mindmap`
-* Run `./bin/run.sh`. This will
-    * Install the pyhton module `virtualenv` on your system
+* Run `./bin/run.sh` to:
+    * Install the python module `virtualenv` on your system
     * Create a virtual environment called `.venv`
     * Activate `.venv`
     * Install all the required modules
@@ -68,4 +68,18 @@ A unit test coverage report can be obtained using the following commands:
 ```bash
 coverage run --include=mindma*.py -m pytest ./test/
 coverage report
+```
+
+## Example
+The file `request_curl.http` contains the requests that should create the following tree:
+```
+root/
+    I/
+        like/
+            potatoes/
+            pineapple/
+        eat/
+            tomatoes/
+                for breakfast/
+                for dinner/
 ```
